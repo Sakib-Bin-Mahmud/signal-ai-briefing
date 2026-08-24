@@ -29,7 +29,7 @@ export default function NewsItemRow({ item, index = 0 }: { item: NewsItem; index
 
   return (
     <article
-      className={`group relative rounded-sm border border-wire-line/80 border-l-4 ${ACCENT[item.category]} bg-white/70 px-4 py-3.5 sm:px-5 sm:py-4 shadow-card transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-card-hover hover:bg-white/90 motion-reduce:transition-none motion-reduce:hover:translate-y-0 animate-fade-slide-up motion-reduce:animate-none`}
+      className={`group relative rounded-sm border border-wire-line/80 border-l-4 ${ACCENT[item.category]} bg-white/70 px-4 py-3.5 sm:px-5 sm:py-4 shadow-card transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:shadow-card-hover hover:bg-white/90 motion-reduce:transition-none motion-reduce:hover:translate-y-0 animate-fade-slide-up motion-reduce:animate-none`}
       style={{ animationDelay: `${Math.min(index, 10) * 45}ms` }}
     >
       <div className="flex items-center gap-2 mb-1.5">
@@ -55,7 +55,7 @@ export default function NewsItemRow({ item, index = 0 }: { item: NewsItem; index
           size={15}
           strokeWidth={2.25}
           aria-hidden
-          className="mt-1 shrink-0 text-ink-soft/50 opacity-0 -translate-x-0.5 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-signal"
+          className="mt-1 shrink-0 text-ink-soft/50 opacity-0 -translate-x-0.5 transition-all duration-200 ease-spring group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-signal"
         />
       </a>
 
@@ -78,7 +78,7 @@ export default function NewsItemRow({ item, index = 0 }: { item: NewsItem; index
             size={12}
             strokeWidth={2.5}
             aria-hidden
-            className={`transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+            className={`transition-transform duration-200 ease-spring ${expanded ? "rotate-180" : ""}`}
           />
         </button>
       )}

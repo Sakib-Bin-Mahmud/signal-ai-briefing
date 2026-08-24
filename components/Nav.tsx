@@ -15,8 +15,8 @@ export default function Nav() {
   return (
     <header className="border-b border-wire-line bg-wire/90 backdrop-blur sticky top-0 z-10 shadow-card">
       <div className="max-w-3xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="focus-ring flex items-center gap-2 rounded-sm">
-          <span className="flex items-end gap-[2px]" aria-hidden>
+        <Link href="/" className="focus-ring group flex items-center gap-2 rounded-sm">
+          <span className="flex items-end gap-[2px] transition-transform duration-200 ease-spring group-hover:animate-wiggle" aria-hidden>
             <span className="w-1 h-2 bg-signal rounded-[1px]" />
             <span className="w-1 h-3 bg-signal rounded-[1px]" />
             <span className="w-1 h-4 bg-signal rounded-[1px]" />
