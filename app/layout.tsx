@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Source_Serif_4, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Source_Serif_4, Inter, IBM_Plex_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 
@@ -14,6 +14,12 @@ const mono = IBM_Plex_Mono({
   variable: "--font-mono",
   weight: ["400", "500"],
 });
+const hero = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-hero",
+  style: ["normal", "italic"],
+  axes: ["opsz", "SOFT"],
+});
 
 export const metadata: Metadata = {
   title: "Signal — Daily AI Intelligence Briefing",
@@ -24,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body
-        className={`${serif.variable} ${sans.variable} ${mono.variable} font-body bg-wire bg-wire-gradient bg-no-repeat text-ink antialiased`}
+        className={`${serif.variable} ${sans.variable} ${mono.variable} ${hero.variable} font-body bg-wire bg-wire-gradient bg-no-repeat text-ink antialiased`}
       >
         <div className="min-h-screen flex flex-col">
           <Nav />

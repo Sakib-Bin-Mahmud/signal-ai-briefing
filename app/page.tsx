@@ -18,6 +18,11 @@ import NewsItemRow from "@/components/NewsItemRow";
 import CategoryBadge from "@/components/CategoryBadge";
 import CardSkeleton from "@/components/CardSkeleton";
 import Toast from "@/components/Toast";
+import HeroSignal from "@/components/illustrations/HeroSignal";
+import PulseLoader from "@/components/illustrations/PulseLoader";
+import EmptyBriefing from "@/components/illustrations/EmptyBriefing";
+import NoResults from "@/components/illustrations/NoResults";
+import ErrorSignal from "@/components/illustrations/ErrorSignal";
 
 export default function BriefingPage() {
   const [digest, setDigest] = useState<Digest | null>(null);
@@ -130,25 +135,42 @@ export default function BriefingPage() {
       <Toast message={toast} />
 
       <div className="mb-8">
-        <div className="flex items-start justify-between gap-4 mb-2">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-signal mb-1.5">{dateStr}</p>
-            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-ink">
-              Today&apos;s briefing
-            </h1>
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <div className="flex items-start gap-2">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-widest text-signal mb-1.5">{dateStr}</p>
+              <h1 className="font-hero text-3xl sm:text-4xl font-semibold tracking-tight text-ink">
+                Today&apos;s briefing
+              </h1>
+            </div>
+            <HeroSignal className="hidden sm:block w-16 h-16 -mt-1 shrink-0" />
           </div>
           <button
             type="button"
             onClick={() => load(true)}
             disabled={refreshing || loading}
-            className="focus-ring mt-1 flex shrink-0 items-center gap-1.5 rounded-sm border border-wire-line bg-white/70 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-ink-soft shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:text-ink hover:shadow-card-hover disabled:pointer-events-none disabled:opacity-60"
+            className="focus-ring mt-1 flex shrink-0 items-center gap-1.5 rounded-sm border border-wire-line bg-white/70 px-3 py-2 font-mono text-[11px] uppercase tracking-wide text-ink-soft shadow-card transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:text-ink hover:shadow-card-hover disabled:pointer-events-none disabled:opacity-60"
           >
-            <RefreshCw size={13} strokeWidth={2.25} aria-hidden className={refreshing ? "animate-spin" : ""} />
+            {refreshing ? <PulseLoader /> : <RefreshCw size={13} strokeWidth={2.25} aria-hidden />}
             <span className="hidden sm:inline">{refreshing ? "Refreshing" : "Refresh"}</span>
           </button>
         </div>
         {digest && !loading && (
-          <p className="text-ink-soft leading-relaxed max-w-2xl">{digest.overview}</p>
+          <div className="relative mt-2 max-w-2xl rounded-sm bg-gold-bg/40 py-3 pl-6 pr-4">
+            <span
+              aria-hidden
+              className="absolute inset-y-2 left-0 w-[3px] rounded-full bg-gradient-to-b from-signal to-gold"
+            />
+            <span
+              aria-hidden
+              className="absolute -left-1 -top-2 select-none font-hero text-4xl leading-none text-gold-deep/50"
+            >
+              &ldquo;
+            </span>
+            <p className="font-hero italic text-[17px] sm:text-lg leading-relaxed text-ink-soft">
+              {digest.overview}
+            </p>
+          </div>
         )}
       </div>
 
@@ -162,12 +184,14 @@ export default function BriefingPage() {
             </div>
             <p className="font-display text-xl font-bold text-ink">{digest.totalScanned}</p>
           </div>
-          <div className="rounded-sm border border-wire-line/80 bg-white/70 px-4 py-3 shadow-card">
-            <div className="flex items-center gap-1.5 text-signal mb-1">
-              <Zap size={13} strokeWidth={2.25} aria-hidden />
-              <span className="font-mono text-[10px] uppercase tracking-wide">High-signal</span>
+          <div className="rounded-sm border border-gold/30 bg-white/70 px-4 py-3 shadow-card">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gold-bg text-signal">
+                <Zap size={12} strokeWidth={2.5} aria-hidden />
+              </span>
+              <span className="font-mono text-[10px] uppercase tracking-wide text-ink-soft">High-signal</span>
             </div>
-            <p className="font-display text-xl font-bold text-ink">{highSignalCount}</p>
+            <p className="font-hero text-3xl sm:text-4xl font-semibold text-signal">{highSignalCount}</p>
           </div>
           <div className="rounded-sm border border-wire-line/80 bg-white/70 px-4 py-3 shadow-card">
             <div
@@ -264,7 +288,7 @@ export default function BriefingPage() {
                     type="button"
                     onClick={() => toggleCategory(s.category)}
                     aria-pressed={active}
-                    className={`focus-ring rounded-sm transition-all duration-200 ${
+                    className={`focus-ring rounded-sm transition-all duration-200 ease-spring ${
                       active ? "ring-2 ring-signal/50" : "hover:-translate-y-0.5"
                     }`}
                   >
@@ -298,16 +322,16 @@ export default function BriefingPage() {
       )}
 
       {!loading && error && (
-        <div className="rounded-sm border border-policy/25 bg-policy-bg/70 px-5 py-6 text-center shadow-card">
-          <AlertTriangle size={20} strokeWidth={2} className="mx-auto mb-2 text-policy" aria-hidden />
-          <p className="text-sm text-policy mb-3">
-            Couldn&apos;t build today&apos;s briefing: {error}. One or more sources may be rate-limiting or
-            temporarily down.
+        <div className="rounded-sm border border-policy/25 bg-policy-bg/70 px-5 py-8 text-center shadow-card animate-fade-slide-up">
+          <ErrorSignal className="mx-auto mb-3 h-24 w-24" />
+          <p className="text-sm text-policy mb-3 max-w-md mx-auto">
+            Couldn&apos;t pull today&apos;s briefing together: {error}. Might just be a source having a bad
+            moment — worth another try.
           </p>
           <button
             type="button"
             onClick={() => load(false)}
-            className="focus-ring inline-flex items-center gap-1.5 rounded-sm border border-policy/30 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide text-policy transition-colors duration-200 hover:bg-policy/10"
+            className="focus-ring inline-flex items-center gap-1.5 rounded-sm border border-policy/30 px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide text-policy transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:bg-policy/10"
           >
             <RefreshCw size={12} strokeWidth={2.25} aria-hidden />
             Try again
@@ -316,26 +340,26 @@ export default function BriefingPage() {
       )}
 
       {!loading && !error && digest && !hasAnyItems && (
-        <div className="rounded-sm border border-wire-line bg-white/60 px-5 py-10 text-center shadow-card">
-          <Layers size={22} strokeWidth={1.75} className="mx-auto mb-3 text-ink-soft/50" aria-hidden />
-          <p className="text-ink-soft">
-            No items found across your sources right now. Check{" "}
+        <div className="rounded-sm border border-wire-line bg-white/60 px-5 py-10 text-center shadow-card animate-fade-slide-up">
+          <EmptyBriefing className="mx-auto mb-3 h-28 w-28" />
+          <p className="text-ink-soft max-w-md mx-auto">
+            Quiet out there — no items came through today. Worth checking{" "}
             <a href="/settings" className="focus-ring rounded-sm underline decoration-wire-line underline-offset-2 text-ink hover:text-signal">
               Sources
             </a>{" "}
-            — a feed URL may need updating.
+            in case a feed needs a nudge.
           </p>
         </div>
       )}
 
       {!loading && !error && digest && hasAnyItems && visibleSections.length === 0 && (
-        <div className="rounded-sm border border-wire-line bg-white/60 px-5 py-10 text-center shadow-card">
-          <Search size={22} strokeWidth={1.75} className="mx-auto mb-3 text-ink-soft/50" aria-hidden />
-          <p className="text-ink-soft mb-3">No items match your filters.</p>
+        <div className="rounded-sm border border-wire-line bg-white/60 px-5 py-10 text-center shadow-card animate-fade-slide-up">
+          <NoResults className="mx-auto mb-3 h-24 w-24" />
+          <p className="text-ink-soft mb-3">Nothing matches those filters — try widening the net.</p>
           <button
             type="button"
             onClick={clearFilters}
-            className="focus-ring inline-flex items-center gap-1.5 rounded-sm border border-wire-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide text-ink-soft hover:text-ink hover:bg-wire-line/40"
+            className="focus-ring inline-flex items-center gap-1.5 rounded-sm border border-wire-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-wide text-ink-soft transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:text-ink hover:bg-wire-line/40"
           >
             <X size={12} strokeWidth={2.25} aria-hidden />
             Clear filters
