@@ -21,7 +21,9 @@ export default function SignalBars({ importance }: { importance: Importance }) {
       {heights.map((h, i) => (
         <span
           key={i}
-          className={`w-[3px] rounded-[1px] ${i < active ? COLOR[importance] : "bg-wire-line"}`}
+          className={`w-[3px] rounded-[1px] transition-colors duration-200 ${
+            i < active ? COLOR[importance] : "bg-wire-line"
+          }`}
           style={{ height: h }}
         />
       ))}

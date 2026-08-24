@@ -7,19 +7,32 @@
 }
 
 ::selection {
-  background-color: #c2410c;
+  background-color: #ba3e0c;
   color: #eceef1;
 }
 
 :focus-visible {
-  outline: 2px solid #c2410c;
+  outline: 2px solid #ba3e0c;
   outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@layer components {
+  /* Crafted focus ring for interactive elements that sit on tinted or bordered
+     surfaces, where a plain outline reads as a default-browser afterthought. */
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-signal/40 focus-visible:ring-offset-2 focus-visible:ring-offset-wire;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
