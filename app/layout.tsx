@@ -24,11 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body
-        className={`${serif.variable} ${sans.variable} ${mono.variable} font-body bg-wire text-ink antialiased`}
+        className={`${serif.variable} ${sans.variable} ${mono.variable} font-body bg-wire bg-wire-gradient bg-no-repeat text-ink antialiased`}
       >
         <div className="min-h-screen flex flex-col">
           <Nav />
-          <main className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-8 py-8">{children}</main>
+          <main className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-12">{children}</main>
           <footer className="border-t border-wire-line py-6 text-center text-xs font-mono text-ink-soft/70">
             Signal — arXiv, OpenAI, DeepMind, Hugging Face &amp; leading AI journalism, ranked daily
           </footer>

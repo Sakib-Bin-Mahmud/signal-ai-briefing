@@ -1,10 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Plus, RotateCcw, Save, Trash2 } from "lucide-react";
 import { DEFAULT_FEEDS, FEEDS_STORAGE_KEY } from "@/lib/feeds";
 import { Category, FeedSource } from "@/lib/types";
+import Toast from "@/components/Toast";
 
 const CATEGORIES: (Category | "")[] = ["", "Research", "Product", "Company", "Policy", "Investment", "Headline"];
+
+const FIELD_LABEL = "block font-mono text-[11px] uppercase tracking-wide text-ink-soft mb-1";
+const FIELD_INPUT =
+  "focus-ring w-full rounded-sm border border-wire-line px-3 py-2 bg-wire text-sm transition-colors duration-200 focus:bg-white focus:border-signal/40";
 
 function emptyFeed(): FeedSource {
   return { id: `custom-${Date.now()}`, name: "", url: "", tier: 2 };
@@ -12,7 +18,7 @@ function emptyFeed(): FeedSource {
 
 export default function SettingsPage() {
   const [feeds, setFeeds] = useState<FeedSource[]>(DEFAULT_FEEDS);
-  const [saved, setSaved] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
     const raw = localStorage.getItem(FEEDS_STORAGE_KEY);
@@ -24,6 +30,12 @@ export default function SettingsPage() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 2500);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   function updateFeed(id: string, patch: Partial<FeedSource>) {
     setFeeds((fs) => fs.map((f) => (f.id === id ? { ...f, ...patch } : f)));
@@ -41,58 +53,58 @@ export default function SettingsPage() {
     const cleaned = feeds.filter((f) => f.name.trim() && f.url.trim());
     localStorage.setItem(FEEDS_STORAGE_KEY, JSON.stringify(cleaned));
     setFeeds(cleaned);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setToast("Sources saved — refresh the briefing to apply");
   }
 
   function handleReset() {
     localStorage.removeItem(FEEDS_STORAGE_KEY);
     setFeeds(DEFAULT_FEEDS);
+    setToast("Reset to default sources");
   }
 
   return (
     <div>
+      <Toast message={toast} />
+
       <div className="mb-8">
-        <h1 className="font-display text-3xl sm:text-4xl font-bold text-ink mb-2">Sources</h1>
-        <p className="text-ink-soft max-w-2xl">
+        <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-ink mb-2">Sources</h1>
+        <p className="text-ink-soft max-w-2xl leading-relaxed">
           RSS/Atom feeds that feed the daily briefing. Tier 1 (official research and company
           feeds) is weighted higher than tier 2 (general journalism). Feeds with a fixed category
           — like the arXiv feeds — always land in that section regardless of keywords.
         </p>
       </div>
 
-      <div className="space-y-4 mb-8">
-        {feeds.map((feed) => (
-          <div key={feed.id} className="border border-wire-line bg-white/60 rounded-sm p-4">
-            <div className="grid sm:grid-cols-[1fr_1fr_90px_140px] gap-3 mb-2">
+      <div className="space-y-3 mb-8">
+        {feeds.map((feed, i) => (
+          <div
+            key={feed.id}
+            className="rounded-sm border border-wire-line/80 bg-white/70 p-4 shadow-card transition-shadow duration-200 hover:shadow-card-hover animate-fade-slide-up motion-reduce:animate-none"
+            style={{ animationDelay: `${Math.min(i, 10) * 40}ms` }}
+          >
+            <div className="grid sm:grid-cols-2 lg:grid-cols-[1fr_1fr_90px_140px] gap-3 mb-3">
               <div>
-                <label className="block font-mono text-[11px] uppercase tracking-wide text-ink-soft mb-1">
-                  Name
-                </label>
+                <label className={FIELD_LABEL}>Name</label>
                 <input
                   value={feed.name}
                   onChange={(e) => updateFeed(feed.id, { name: e.target.value })}
-                  className="w-full border border-wire-line rounded-sm px-3 py-2 bg-wire focus:bg-white text-sm"
+                  className={FIELD_INPUT}
                 />
               </div>
               <div>
-                <label className="block font-mono text-[11px] uppercase tracking-wide text-ink-soft mb-1">
-                  Feed URL
-                </label>
+                <label className={FIELD_LABEL}>Feed URL</label>
                 <input
                   value={feed.url}
                   onChange={(e) => updateFeed(feed.id, { url: e.target.value })}
-                  className="w-full border border-wire-line rounded-sm px-3 py-2 bg-wire focus:bg-white text-sm"
+                  className={FIELD_INPUT}
                 />
               </div>
               <div>
-                <label className="block font-mono text-[11px] uppercase tracking-wide text-ink-soft mb-1">
-                  Tier
-                </label>
+                <label className={FIELD_LABEL}>Tier</label>
                 <select
                   value={feed.tier}
                   onChange={(e) => updateFeed(feed.id, { tier: Number(e.target.value) as 1 | 2 | 3 })}
-                  className="w-full border border-wire-line rounded-sm px-3 py-2 bg-wire focus:bg-white text-sm"
+                  className={FIELD_INPUT}
                 >
                   <option value={1}>1 — Official</option>
                   <option value={2}>2 — Journalism</option>
@@ -100,9 +112,7 @@ export default function SettingsPage() {
                 </select>
               </div>
               <div>
-                <label className="block font-mono text-[11px] uppercase tracking-wide text-ink-soft mb-1">
-                  Fixed category
-                </label>
+                <label className={FIELD_LABEL}>Fixed category</label>
                 <select
                   value={feed.fixedCategory ?? ""}
                   onChange={(e) =>
@@ -110,7 +120,7 @@ export default function SettingsPage() {
                       fixedCategory: (e.target.value || undefined) as Category | undefined,
                     })
                   }
-                  className="w-full border border-wire-line rounded-sm px-3 py-2 bg-wire focus:bg-white text-sm"
+                  className={FIELD_INPUT}
                 >
                   {CATEGORIES.map((c) => (
                     <option key={c} value={c}>
@@ -121,9 +131,11 @@ export default function SettingsPage() {
               </div>
             </div>
             <button
+              type="button"
               onClick={() => removeFeed(feed.id)}
-              className="font-mono text-[11px] text-ink-soft/60 hover:text-signal"
+              className="focus-ring inline-flex items-center gap-1.5 rounded-sm font-mono text-[11px] uppercase tracking-wide text-ink-soft/60 transition-colors duration-200 hover:text-policy"
             >
+              <Trash2 size={12} strokeWidth={2.25} aria-hidden />
               Remove source
             </button>
           </div>
@@ -132,24 +144,29 @@ export default function SettingsPage() {
 
       <div className="flex flex-wrap items-center gap-3">
         <button
+          type="button"
           onClick={addFeed}
-          className="px-4 py-2 rounded-sm border border-ink/30 font-mono text-xs uppercase tracking-wide hover:bg-ink/5 transition-colors"
+          className="focus-ring inline-flex items-center gap-1.5 rounded-sm border border-ink/25 px-4 py-2 font-mono text-xs uppercase tracking-wide transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink/5 hover:shadow-card"
         >
-          + Add source
+          <Plus size={13} strokeWidth={2.25} aria-hidden />
+          Add source
         </button>
         <button
+          type="button"
           onClick={handleSave}
-          className="px-4 py-2 rounded-sm bg-ink text-wire font-mono text-xs uppercase tracking-wide hover:bg-ink/85 transition-colors"
+          className="focus-ring inline-flex items-center gap-1.5 rounded-sm bg-ink px-4 py-2 font-mono text-xs uppercase tracking-wide text-wire shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-ink/85 hover:shadow-card-hover"
         >
+          <Save size={13} strokeWidth={2.25} aria-hidden />
           Save
         </button>
         <button
+          type="button"
           onClick={handleReset}
-          className="px-4 py-2 rounded-sm font-mono text-xs uppercase tracking-wide text-ink-soft hover:text-signal transition-colors"
+          className="focus-ring inline-flex items-center gap-1.5 rounded-sm px-4 py-2 font-mono text-xs uppercase tracking-wide text-ink-soft transition-colors duration-200 hover:text-signal"
         >
+          <RotateCcw size={13} strokeWidth={2.25} aria-hidden />
           Reset to defaults
         </button>
-        {saved && <span className="text-sm text-research">Saved. Refresh the briefing to apply.</span>}
       </div>
 
       <p className="mt-8 font-mono text-[11px] text-ink-soft/50 max-w-2xl">
