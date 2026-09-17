@@ -10,7 +10,7 @@ const CATEGORIES: (Category | "")[] = ["", "Research", "Product", "Company", "Po
 
 const FIELD_LABEL = "block font-mono text-[11px] uppercase tracking-wide text-ink-soft mb-1";
 const FIELD_INPUT =
-  "focus-ring w-full rounded-sm border border-wire-line px-3 py-2 bg-wire text-sm transition-colors duration-200 focus:bg-white focus:border-signal/40";
+  "focus-ring w-full rounded-[2px] border border-paper-line px-3 py-2 bg-paper text-sm transition-colors duration-200 focus:bg-paper-raised focus:border-cobalt/40";
 
 function emptyFeed(): FeedSource {
   return { id: `custom-${Date.now()}`, name: "", url: "", tier: 2 };
@@ -67,7 +67,7 @@ export default function SettingsPage() {
       <Toast message={toast} />
 
       <div className="mb-8">
-        <h1 className="font-hero text-3xl sm:text-4xl font-semibold tracking-tight text-ink mb-2">Sources</h1>
+        <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-ink mb-2">Sources</h1>
         <p className="text-ink-soft max-w-2xl leading-relaxed">
           RSS/Atom feeds that feed the daily briefing. Tier 1 (official research and company
           feeds) is weighted higher than tier 2 (general journalism). Feeds with a fixed category
@@ -79,7 +79,7 @@ export default function SettingsPage() {
         {feeds.map((feed, i) => (
           <div
             key={feed.id}
-            className="rounded-sm border border-wire-line/80 bg-white/70 p-4 shadow-card transition-shadow duration-200 ease-spring hover:shadow-card-hover animate-fade-slide-up motion-reduce:animate-none"
+            className="rounded-[2px] border border-paper-line bg-paper-raised/70 p-4 shadow-card transition-shadow duration-200 ease-spring hover:shadow-card-hover animate-fade-slide-up motion-reduce:animate-none"
             style={{ animationDelay: `${Math.min(i, 10) * 40}ms` }}
           >
             <div className="grid sm:grid-cols-2 lg:grid-cols-[1fr_1fr_90px_140px] gap-3 mb-3">
@@ -146,7 +146,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={addFeed}
-          className="focus-ring inline-flex items-center gap-1.5 rounded-sm border border-ink/25 px-4 py-2 font-mono text-xs uppercase tracking-wide transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:bg-ink/5 hover:shadow-card"
+          className="focus-ring inline-flex items-center gap-1.5 rounded-[2px] border border-ink/20 px-4 py-2 font-mono text-xs uppercase tracking-wide transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:bg-ink/5 hover:shadow-card"
         >
           <Plus size={13} strokeWidth={2.25} aria-hidden />
           Add source
@@ -154,7 +154,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={handleSave}
-          className="focus-ring inline-flex items-center gap-1.5 rounded-sm bg-ink px-4 py-2 font-mono text-xs uppercase tracking-wide text-wire shadow-card transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:bg-ink/85 hover:shadow-card-hover"
+          className="focus-ring inline-flex items-center gap-1.5 rounded-[2px] bg-navy px-4 py-2 font-mono text-xs uppercase tracking-wide text-paper shadow-card transition-all duration-200 ease-spring hover:-translate-y-0.5 hover:bg-navy-deep hover:shadow-card-hover"
         >
           <Save size={13} strokeWidth={2.25} aria-hidden />
           Save
@@ -162,7 +162,7 @@ export default function SettingsPage() {
         <button
           type="button"
           onClick={handleReset}
-          className="focus-ring inline-flex items-center gap-1.5 rounded-sm px-4 py-2 font-mono text-xs uppercase tracking-wide text-ink-soft transition-colors duration-200 hover:text-signal"
+          className="focus-ring inline-flex items-center gap-1.5 rounded-sm px-4 py-2 font-mono text-xs uppercase tracking-wide text-ink-soft transition-colors duration-200 hover:text-cobalt"
         >
           <RotateCcw size={13} strokeWidth={2.25} aria-hidden />
           Reset to defaults

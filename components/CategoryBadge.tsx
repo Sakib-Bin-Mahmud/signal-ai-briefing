@@ -23,7 +23,7 @@ export default function CategoryBadge({ category }: { category: Category }) {
   const Icon = ICONS[category];
   return (
     <span
-      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-sm border font-mono text-[11px] uppercase tracking-wide transition-colors duration-200 ${STYLES[category]}`}
+      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-[2px] border font-mono text-[10px] uppercase tracking-[0.08em] transition-colors duration-200 ${STYLES[category]}`}
     >
       <Icon size={11} strokeWidth={2.25} aria-hidden />
       {category}

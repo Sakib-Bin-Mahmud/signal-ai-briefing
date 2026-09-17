@@ -7,12 +7,12 @@
 }
 
 ::selection {
-  background-color: #ba3e0c;
-  color: #eceef1;
+  background-color: #2563eb;
+  color: #f7f5f0;
 }
 
 :focus-visible {
-  outline: 2px solid #ba3e0c;
+  outline: 2px solid #2563eb;
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -21,7 +21,25 @@
   /* Crafted focus ring for interactive elements that sit on tinted or bordered
      surfaces, where a plain outline reads as a default-browser afterthought. */
   .focus-ring {
-    @apply outline-none focus-visible:ring-2 focus-visible:ring-signal/40 focus-visible:ring-offset-2 focus-visible:ring-offset-wire;
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-cobalt/40 focus-visible:ring-offset-2 focus-visible:ring-offset-paper;
+  }
+
+  .focus-ring-navy {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-sky/60 focus-visible:ring-offset-2 focus-visible:ring-offset-navy;
+  }
+
+  /* A thin rule with a centered accent mark, used as a section anchor in the
+     masthead and between editorial groupings. */
+  .rule-accent {
+    @apply relative flex items-center;
+  }
+  .rule-accent::before {
+    content: "";
+    @apply h-px flex-1 bg-paper-line;
+  }
+  .rule-accent::after {
+    content: "\2726";
+    @apply mx-3 text-[10px] text-gold-ink/70;
   }
 }
 

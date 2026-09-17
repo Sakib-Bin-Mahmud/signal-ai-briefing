@@ -2,9 +2,9 @@ import { Importance } from "@/lib/types";
 
 const BAR_COUNT: Record<Importance, number> = { High: 3, Medium: 2, Low: 1 };
 const COLOR: Record<Importance, string> = {
-  High: "bg-signal",
-  Medium: "bg-ink-soft",
-  Low: "bg-wire-line",
+  High: "bg-gold-ink",
+  Medium: "bg-cobalt",
+  Low: "bg-ink-faint",
 };
 
 export default function SignalBars({ importance }: { importance: Importance }) {
@@ -22,7 +22,7 @@ export default function SignalBars({ importance }: { importance: Importance }) {
         <span
           key={i}
           className={`w-[3px] rounded-[1px] transition-colors duration-200 ${
-            i < active ? COLOR[importance] : "bg-wire-line"
+            i < active ? COLOR[importance] : "bg-paper-line"
           }`}
           style={{ height: h }}
         />

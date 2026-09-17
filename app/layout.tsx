@@ -1,24 +1,19 @@
 import type { Metadata } from "next";
-import { Source_Serif_4, Inter, IBM_Plex_Mono, Fraunces } from "next/font/google";
+import { Playfair_Display, Inter, DM_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 
-const serif = Source_Serif_4({
+const display = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-display",
   weight: ["600", "700"],
+  style: ["normal", "italic"],
 });
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
-const mono = IBM_Plex_Mono({
+const mono = DM_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   weight: ["400", "500"],
-});
-const hero = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-hero",
-  style: ["normal", "italic"],
-  axes: ["opsz", "SOFT"],
 });
 
 export const metadata: Metadata = {
@@ -30,12 +25,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body
-        className={`${serif.variable} ${sans.variable} ${mono.variable} ${hero.variable} font-body bg-wire bg-wire-gradient bg-no-repeat text-ink antialiased`}
+        className={`${display.variable} ${sans.variable} ${mono.variable} font-body bg-paper bg-paper-grain text-ink antialiased`}
       >
         <div className="min-h-screen flex flex-col">
           <Nav />
           <main className="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-12">{children}</main>
-          <footer className="border-t border-wire-line py-6 text-center text-xs font-mono text-ink-soft/70">
+          <footer className="border-t border-paper-line py-6 text-center text-xs font-mono text-ink-soft/70">
             Signal — arXiv, OpenAI, DeepMind, Hugging Face &amp; leading AI journalism, ranked daily
           </footer>
         </div>
